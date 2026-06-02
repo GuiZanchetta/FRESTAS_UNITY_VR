@@ -15,7 +15,10 @@ public class PlayStopTimeline : MonoBehaviour
     public float cooldown = 0.5f;
 
     [Header("Behavior")]
-    public bool resetInsteadOfPlay = false; // toggle per button
+    public bool resetInsteadOfPlay = false;
+
+    [Header("OSC")]
+    public OscSender oscSender;  // optional — assign in Inspector to notify Reaper
 
     private Vector3 startPos;
     private bool pressed = false;
@@ -30,13 +33,10 @@ public class PlayStopTimeline : MonoBehaviour
         if (pressed) return;
 
         bool isTouching =
-            (leftFingertip != null && Vector3.Distance(leftFingertip.position, transform.position) < triggerDistance) ||
+            (leftFingertip  != null && Vector3.Distance(leftFingertip.position,  transform.position) < triggerDistance) ||
             (rightFingertip != null && Vector3.Distance(rightFingertip.position, transform.position) < triggerDistance);
 
-        if (isTouching)
-        {
-            PressButton();
-        }
+        if (isTouching) PressButton();
     }
 
     void PressButton()
@@ -54,11 +54,13 @@ public class PlayStopTimeline : MonoBehaviour
                 director.Stop();
                 director.time = 0;
                 director.Evaluate();
+                oscSender?.SendStop();
             }
             else
             {
                 // PLAY
                 director.Play();
+                oscSender?.SendPlay();
             }
         }
 
