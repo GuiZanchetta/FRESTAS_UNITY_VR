@@ -42,15 +42,12 @@ public class PlayStopTimeline : MonoBehaviour
     void PressButton()
     {
         pressed = true;
-
-        // Visual press
         transform.localPosition = startPos - new Vector3(0, pressDepth, 0);
 
         if (director != null)
         {
             if (resetInsteadOfPlay)
             {
-                // STOP + REWIND
                 director.Stop();
                 director.time = 0;
                 director.Evaluate();
@@ -58,7 +55,6 @@ public class PlayStopTimeline : MonoBehaviour
             }
             else
             {
-                // PLAY
                 director.Play();
                 oscSender?.SendPlay();
             }
