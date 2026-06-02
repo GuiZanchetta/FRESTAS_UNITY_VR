@@ -1,0 +1,860 @@
+fileFormatVersion: 2
+guid: ffa900db1c9d4402cb832f1dd5db3b14
+ModelImporter:
+  serializedVersion: 24200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: "\nClip 'Song_AvoaPavao_Cris' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Cris:LeftForeArmRoll' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'Cris:RightForeArmRoll'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: Cris:Hips
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftUpLeg
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightUpLeg
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftLeg
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightLeg
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:Spine
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:Spine1
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftShoulder
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightShoulder
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftArm
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightArm
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftForeArm
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightForeArm
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHand
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHand
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftToeBase
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightToeBase
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftInHandThumb
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandThumb1
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandThumb2
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftInHandIndex
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandIndex1
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandIndex2
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftInHandMiddle
+      humanName: Left Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandMiddle1
+      humanName: Left Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandMiddle2
+      humanName: Left Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftInHandRing
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandRing1
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandRing2
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftInHandPinky
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandPinky1
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:LeftHandPinky2
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightInHandThumb
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandThumb1
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandThumb2
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightInHandIndex
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandIndex1
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandIndex2
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightInHandMiddle
+      humanName: Right Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandMiddle1
+      humanName: Right Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandMiddle2
+      humanName: Right Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightInHandRing
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandRing1
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandRing2
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightInHandPinky
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandPinky1
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:RightHandPinky2
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Cris:Spine2
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: Song_AvoaPavao_Cris(Clone)
+      parentName: 
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -4.3297806e-17, y: 0.7071068, z: 0.7071068, w: -4.3297806e-17}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:Reference
+      parentName: Song_AvoaPavao_Cris(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:Hips
+      parentName: Cris:Reference
+      position: {x: -0.00020241743, y: -0.002848506, z: 0.88207394}
+      rotation: {x: -0.023946222, y: 0.0022903213, z: -0.042552654, w: 0.9988046}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftUpLeg
+      parentName: Cris:Hips
+      position: {x: 0.08846131, y: 0.003622572, z: -0.01588776}
+      rotation: {x: 0.07142206, y: 0.03540068, z: -0.12203047, w: 0.9893201}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftLeg
+      parentName: Cris:LeftUpLeg
+      position: {x: -5.684342e-17, y: -0.0034356047, z: -0.3936813}
+      rotation: {x: -0.09330485, y: -0.028792832, z: 0.01192267, w: 0.99514973}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftFoot
+      parentName: Cris:LeftLeg
+      position: {x: 1.944668e-10, y: -0.021021731, z: -0.40111858}
+      rotation: {x: 0.2552258, y: -0.054935683, z: 0.022995878, w: 0.96504563}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftToeBase
+      parentName: Cris:LeftFoot
+      position: {x: -0.000000005708285, y: 0.063785, z: -0.07827688}
+      rotation: {x: -0.09579823, y: 3.4854774e-17, z: 1.8298757e-17, w: 0.9954008}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightUpLeg
+      parentName: Cris:Hips
+      position: {x: -0.08846131, y: 0.003622572, z: -0.01588776}
+      rotation: {x: 0.10945553, y: -0.019223034, z: 0.110567346, w: 0.98763597}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightLeg
+      parentName: Cris:RightUpLeg
+      position: {x: -2.2737369e-16, y: -0.0036793929, z: -0.4216167}
+      rotation: {x: -0.22696115, y: 0.072368346, z: -0.08734517, w: 0.96727574}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightFoot
+      parentName: Cris:RightLeg
+      position: {x: -6.460444e-10, y: -0.020596499, z: -0.3930046}
+      rotation: {x: 0.029456967, y: 0.0056090006, z: -0.003043405, w: 0.9995457}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightToeBase
+      parentName: Cris:RightFoot
+      position: {x: 0.000000002936124, y: 0.07955552, z: -0.0462504}
+      rotation: {x: -6.938894e-18, y: 6.938894e-18, z: -1.647987e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:Spine
+      parentName: Cris:Hips
+      position: {x: 0.004149485, y: -0.001393384, z: 0.08363122}
+      rotation: {x: 0.01587378, y: -0.019438025, z: -0.04874647, w: 0.9984959}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:Spine1
+      parentName: Cris:Spine
+      position: {x: -2.842171e-16, y: 0, z: 0.1188679}
+      rotation: {x: 0.04139607, y: -0.055489443, z: -0.027221415, w: 0.99722934}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:Spine2
+      parentName: Cris:Spine1
+      position: {x: 3.694822e-16, y: 0, z: 0.13867919}
+      rotation: {x: -0.03225069, y: 0.04943305, z: 0.044702902, w: 0.9972552}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftShoulder
+      parentName: Cris:Spine2
+      position: {x: 0.0284119, y: 0.04581915, z: 0.03150619}
+      rotation: {x: 0.1496387, y: -0.12363727, z: 0.061729543, w: 0.9790361}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftArm
+      parentName: Cris:LeftShoulder
+      position: {x: 0.22824788, y: 4.5474737e-16, z: 4.5474737e-16}
+      rotation: {x: -0.15985717, y: 0.18985124, z: -0.008288234, w: 0.96867615}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftForeArm
+      parentName: Cris:LeftArm
+      position: {x: 0.22036439, y: -4.5474737e-16, z: -1.364242e-15}
+      rotation: {x: -0.00000506591, y: -0.007836445, z: 0.0006464333, w: 0.9999691}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftForeArmRoll
+      parentName: Cris:LeftForeArm
+      position: {x: 0.09539929, y: 1.364242e-15, z: 4.5474737e-16}
+      rotation: {x: 0.07869607, y: 2.410066e-16, z: 4.1490992e-17, w: 0.99689865}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHand
+      parentName: Cris:LeftForeArmRoll
+      position: {x: 0.09539929, y: -5.4781138e-11, z: -1.26269e-10}
+      rotation: {x: 0.046672057, y: -0.06489653, z: -0.1008255, w: 0.9916877}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftInHandIndex
+      parentName: Cris:LeftHand
+      position: {x: 0.01, y: 0.01, z: 2.2737369e-16}
+      rotation: {x: 1.3912792e-17, y: 8.4172374e-16, z: 0.07088902, w: 0.9974842}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandIndex1
+      parentName: Cris:LeftInHandIndex
+      position: {x: 0.070710674, y: 1.1368679e-16, z: 2.2737369e-16}
+      rotation: {x: 0.0070319916, y: 0.030490125, z: -0.021887641, w: 0.99927074}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandIndex2
+      parentName: Cris:LeftHandIndex1
+      position: {x: 0.050990198, y: 0, z: 0}
+      rotation: {x: 0.00000025890745, y: 0.03693717, z: 0.0000012530935, w: 0.99931765}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandIndex3
+      parentName: Cris:LeftHandIndex2
+      position: {x: 0.022360679, y: 0, z: 0}
+      rotation: {x: 5.2041704e-18, y: -3.4694465e-18, z: -5.399e-42, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftInHandMiddle
+      parentName: Cris:LeftHand
+      position: {x: 0.015, y: 0, z: 0}
+      rotation: {x: -2.0816682e-17, y: -1.7347239e-16, z: -3.8857809e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandMiddle1
+      parentName: Cris:LeftInHandMiddle
+      position: {x: 0.065, y: 0, z: 0}
+      rotation: {x: -0.000000022351731, y: 0.039493423, z: 0.00000029779025, w: 0.9992199}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandMiddle2
+      parentName: Cris:LeftHandMiddle1
+      position: {x: 0.06082763, y: 0, z: 0}
+      rotation: {x: 0.000000005929312, y: 0.03611018, z: 0.000000027566845, w: 0.99934787}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandMiddle3
+      parentName: Cris:LeftHandMiddle2
+      position: {x: 0.022360679, y: 0, z: 2.2737369e-16}
+      rotation: {x: 1.7347237e-18, y: -2.0816682e-17, z: -2.0816682e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftInHandPinky
+      parentName: Cris:LeftHand
+      position: {x: 0.005, y: -0.02, z: 0}
+      rotation: {x: -0.0000004246828, y: -0.0000018551933, z: -0.0806844, w: 0.99673975}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandPinky1
+      parentName: Cris:LeftInHandPinky
+      position: {x: 0.077620864, y: 2.2737369e-16, z: 2.2737369e-16}
+      rotation: {x: -0.016120441, y: 0.023720266, z: 0.025250562, w: 0.9992697}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandPinky2
+      parentName: Cris:LeftHandPinky1
+      position: {x: 0.04123106, y: 2.2737369e-16, z: -2.2737369e-16}
+      rotation: {x: -0.00000016577532, y: 0.038146477, z: 0.0000014503012, w: 0.99927217}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandPinky3
+      parentName: Cris:LeftHandPinky2
+      position: {x: 0.022360679, y: -2.2737369e-16, z: 0}
+      rotation: {x: 7.2638e-41, y: -2.4286125e-17, z: -2.0816682e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftInHandRing
+      parentName: Cris:LeftHand
+      position: {x: 0.01, y: -0.01, z: 0}
+      rotation: {x: 6.9563944e-17, y: -8.904188e-16, z: -0.07088902, w: 0.9974842}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandRing1
+      parentName: Cris:LeftInHandRing
+      position: {x: 0.070710674, y: 2.2737369e-16, z: -4.5474737e-16}
+      rotation: {x: -0.0070320647, y: 0.030490782, z: 0.021884209, w: 0.99927074}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandRing2
+      parentName: Cris:LeftHandRing1
+      position: {x: 0.050990198, y: 0, z: 4.5474737e-16}
+      rotation: {x: 0.000000025611367, y: 0.036943864, z: 0.00000091362733, w: 0.9993174}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandRing3
+      parentName: Cris:LeftHandRing2
+      position: {x: 0.022360679, y: 2.2737369e-16, z: -2.2737369e-16}
+      rotation: {x: 1.7347237e-18, y: -3.4694465e-18, z: 1.3877785e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftInHandThumb
+      parentName: Cris:LeftHand
+      position: {x: 0.005, y: 0.02, z: -0.01}
+      rotation: {x: -0.6943393, y: -0.14878924, z: 0.28375444, w: 0.64438975}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandThumb1
+      parentName: Cris:LeftInHandThumb
+      position: {x: 0.04153312, y: 0, z: 1.1368679e-16}
+      rotation: {x: -0.032170635, y: 0.024571009, z: -0.0259953, w: 0.9988422}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandThumb2
+      parentName: Cris:LeftHandThumb1
+      position: {x: 0.03162278, y: 5.358288e-12, z: 5.402626e-12}
+      rotation: {x: 0.01045682, y: 0.03529708, z: 0.003903365, w: 0.9993146}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:LeftHandThumb3
+      parentName: Cris:LeftHandThumb2
+      position: {x: 0.02, y: 0, z: 0}
+      rotation: {x: -6.938894e-18, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:Neck
+      parentName: Cris:Spine2
+      position: {x: -1.1368679e-16, y: -4.5474737e-16, z: 0.13867919}
+      rotation: {x: -0.026584934, y: 0.07139452, z: -0.0030682683, w: 0.9970891}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:Head
+      parentName: Cris:Neck
+      position: {x: 0.008521188, y: 0.03543353, z: 0.104991}
+      rotation: {x: -0.027116159, y: 0.027358525, z: -0.019010268, w: 0.999077}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightShoulder
+      parentName: Cris:Spine2
+      position: {x: -0.04239101, y: 0.041589167, z: 0.03422568}
+      rotation: {x: -0.00048321096, y: 0.16489297, z: 0.14059994, w: 0.97623855}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightArm
+      parentName: Cris:RightShoulder
+      position: {x: -0.2000964, y: 4.5474737e-16, z: 6.821211e-16}
+      rotation: {x: 0.62107766, y: -0.1699576, z: 0.02332674, w: 0.76474357}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightForeArm
+      parentName: Cris:RightArm
+      position: {x: -0.2562025, y: -9.094947e-16, z: 9.094947e-16}
+      rotation: {x: 0.0008623597, y: 0.021077909, z: 0.031986978, w: 0.9992657}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightForeArmRoll
+      parentName: Cris:RightForeArm
+      position: {x: -0.10280059, y: -2.2737369e-16, z: -1.818989e-15}
+      rotation: {x: 0.7153221, y: 3.3761314e-16, z: 4.9648982e-17, w: 0.6987949}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHand
+      parentName: Cris:RightForeArmRoll
+      position: {x: -0.10280059, y: 9.410155e-10, z: -2.3828298e-10}
+      rotation: {x: 0.15426123, y: 0.051227536, z: 0.012533452, w: 0.9866216}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightInHandIndex
+      parentName: Cris:RightHand
+      position: {x: -0.01, y: 0.01, z: -4.5474737e-16}
+      rotation: {x: 1.3912786e-17, y: 4.3825284e-16, z: -0.07088902, w: 0.9974842}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandIndex1
+      parentName: Cris:RightInHandIndex
+      position: {x: -0.070710674, y: 0, z: 2.2737369e-16}
+      rotation: {x: 0.0070320843, y: -0.030495616, z: 0.021885999, w: 0.99927056}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandIndex2
+      parentName: Cris:RightHandIndex1
+      position: {x: -0.050990198, y: 0, z: 0}
+      rotation: {x: -0.00000043911828, y: -0.036938813, z: -0.000004693077, w: 0.9993176}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandIndex3
+      parentName: Cris:RightHandIndex2
+      position: {x: -0.022360679, y: 0, z: 0}
+      rotation: {x: -2.2694e-41, y: 3.642919e-17, z: -6.938894e-18, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightInHandMiddle
+      parentName: Cris:RightHand
+      position: {x: -0.015, y: -2.2737369e-16, z: 0}
+      rotation: {x: 2.775558e-17, y: -1.422473e-16, z: -2.914336e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandMiddle1
+      parentName: Cris:RightInHandMiddle
+      position: {x: -0.065, y: 2.2737369e-16, z: 0}
+      rotation: {x: 0.00000011920919, y: -0.039491594, z: 0.00000025180614, w: 0.9992199}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandMiddle2
+      parentName: Cris:RightHandMiddle1
+      position: {x: -0.06082763, y: -1.1368679e-16, z: 2.2737369e-16}
+      rotation: {x: -0.00000020865414, y: -0.036117405, z: -0.0000024097917, w: 0.9993476}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandMiddle3
+      parentName: Cris:RightHandMiddle2
+      position: {x: -0.022360679, y: 0, z: -2.2737369e-16}
+      rotation: {x: 2.775558e-17, y: 3.4694465e-18, z: 4.3756e-41, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightInHandPinky
+      parentName: Cris:RightHand
+      position: {x: -0.005, y: -0.02, z: -2.2737369e-16}
+      rotation: {x: -0.000000029802301, y: 0.000001244246, z: 0.08068925, w: 0.9967394}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandPinky1
+      parentName: Cris:RightInHandPinky
+      position: {x: -0.077620864, y: 2.2737369e-16, z: 0}
+      rotation: {x: -0.0161204, y: -0.02372246, z: -0.025250154, w: 0.99926966}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandPinky2
+      parentName: Cris:RightHandPinky1
+      position: {x: -0.04123106, y: 0, z: 0}
+      rotation: {x: -0.00000013783563, y: -0.038139712, z: 0.0000006209588, w: 0.99927247}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandPinky3
+      parentName: Cris:RightHandPinky2
+      position: {x: -0.022360679, y: 0, z: 0}
+      rotation: {x: 2.775558e-17, y: 6.0715326e-18, z: -2.601e-41, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightInHandRing
+      parentName: Cris:RightHand
+      position: {x: -0.01, y: -0.01, z: 0}
+      rotation: {x: 4.173837e-17, y: -2.4347385e-16, z: 0.07088902, w: 0.9974842}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandRing1
+      parentName: Cris:RightInHandRing
+      position: {x: -0.070710674, y: 0, z: 0}
+      rotation: {x: -0.0070319767, y: -0.030492421, z: -0.021885896, w: 0.9992707}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandRing2
+      parentName: Cris:RightHandRing1
+      position: {x: -0.050990198, y: 2.2737369e-16, z: 2.2737369e-16}
+      rotation: {x: -0.00000001629813, y: -0.036936596, z: -0.00000038053224, w: 0.99931765}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandRing3
+      parentName: Cris:RightHandRing2
+      position: {x: -0.022360679, y: -2.2737369e-16, z: -4.5474737e-16}
+      rotation: {x: -2.775558e-17, y: 1.647987e-17, z: 1.3877785e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightInHandThumb
+      parentName: Cris:RightHand
+      position: {x: -0.005, y: 0.02, z: -0.01}
+      rotation: {x: -0.73160607, y: -0.23509586, z: 0.23617397, w: 0.59473056}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandThumb1
+      parentName: Cris:RightInHandThumb
+      position: {x: -0.04153312, y: 0, z: 0}
+      rotation: {x: -0.030298892, y: -0.025259206, z: 0.025325278, w: 0.9989007}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandThumb2
+      parentName: Cris:RightHandThumb1
+      position: {x: -0.03162278, y: 5.222319e-12, z: 5.5342753e-12}
+      rotation: {x: 0.010835341, y: -0.03520062, z: -0.0047636027, w: 0.9993102}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cris:RightHandThumb3
+      parentName: Cris:RightHandThumb2
+      position: {x: -0.02, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
