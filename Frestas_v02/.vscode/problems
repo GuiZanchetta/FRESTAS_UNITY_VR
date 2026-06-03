@@ -1,0 +1,9 @@
+DirectoryNotFoundException: Could not find a part of the path "/Users/pj/Unity/Fretas_v02_Build/Unity-iPhone.xcodeproj/project.pbxproj".
+System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share, System.Int32 bufferSize, System.Boolean anonymous, System.IO.FileOptions options) (at <c5eeda5e65d44b388e164c6c5cfe0702>:0)
+System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share, System.Int32 bufferSize, System.IO.FileOptions options) (at <c5eeda5e65d44b388e164c6c5cfe0702>:0)
+(wrapper remoting-invoke-with-check) System.IO.FileStream..ctor(string,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,int,System.IO.FileOptions)
+System.IO.StreamReader..ctor (System.String path, System.Text.Encoding encoding, System.Boolean detectEncodingFromByteOrderMarks, System.Int32 bufferSize) (at <c5eeda5e65d44b388e164c6c5cfe0702>:0)
+System.IO.StreamReader..ctor (System.String path, System.Text.Encoding encoding, System.Boolean detectEncodingFromByteOrderMarks) (at <c5eeda5e65d44b388e164c6c5cfe0702>:0)
+(wrapper remoting-invoke-with-check) System.IO.StreamReader..ctor(string,System.Text.Encoding,bool)
+System.IO.File.InternalReadAllText (System.String path, System.Text.Encoding encoding) (at <c5eeda5e65d44b388e164c6c5cfe0702>:0)
+System.IO.File.ReadAllText (System.String path) (at <c5eeda5e65d44b388e164c6c5cfe0702>:0)
