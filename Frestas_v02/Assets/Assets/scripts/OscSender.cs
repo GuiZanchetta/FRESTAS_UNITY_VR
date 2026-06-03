@@ -5,8 +5,8 @@
 // Send(packet, length, host, port) overload, same InsertString / PadSize logic.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
@@ -19,7 +19,8 @@ public class OscSender : MonoBehaviour
     public int    targetPort = 9000;
 
     private UdpClient        _sender;
-    private Queue<byte[]>    _queue = new Queue<byte[]>();
+    private IPEndPoint       _endpoint;
+    private readonly Queue<byte[]> _queue = new();
     private bool             _ready;
 
     // ── Public API ────────────────────────────────────────────────────────────
@@ -27,8 +28,9 @@ public class OscSender : MonoBehaviour
     public void Initialize()
     {
         if (_ready) return;
-        _sender = new UdpClient();          // same as syncmuseosc: no-arg, no Connect()
-        _ready  = true;
+        _sender   = new UdpClient();
+        _endpoint = new IPEndPoint(IPAddress.Parse(targetIP), targetPort);
+        _ready    = true;
         Debug.Log($"[OscSender] ready → {targetIP}:{targetPort}");
     }
 
@@ -67,8 +69,8 @@ public class OscSender : MonoBehaviour
             byte[] pkt = _queue.Dequeue();
             try
             {
-                // Exact same send call as syncmuseosc SendPacket()
-                _sender.Send(pkt, pkt.Length, targetIP, targetPort);
+                // IPEndPoint overload — no DNS, no nw_socket
+                _sender.Send(pkt, pkt.Length, _endpoint);
             }
             catch (Exception e)
             {
