@@ -1,25 +1,25 @@
-// OscSender.cs — visionOS-safe UDP/OSC sender for Unity 6 / IL2CPP
+// OscSender.cs — visionOS / IL2CPP safe, zero thread-pool usage
 //
-// Root cause of sem_open failed on visionOS:
-//   System.Threading.Semaphore (the heavyweight class) calls sem_open()
-//   internally. UdpClient's legacy synchronous path can trigger this via
-//   the socket layer's internal locking. visionOS sandbox blocks named
-//   POSIX semaphores entirely.
+// Why sem_open persists after the previous fix:
+//   Task.Run() schedules work on the .NET thread pool. The first time any
+//   thread-pool thread is created, Mono/CoreCLR initialises its internal
+//   worker semaphore via sem_open() — which visionOS blocks unconditionally.
+//   UdpClient.SendAsync() hits the same path: its I/O completions are posted
+//   back through the thread pool. Moving the UdpClient constructor to the
+//   main thread does not help because the sem_open call happens later, on
+//   the first Task.Run / first async completion.
 //
-// Fix applied here:
-//   • UdpClient constructed + connected on the main thread in Initialize(),
-//     before any background work begins — avoids the runtime's lazy socket
-//     init being triggered from a thread-pool context.
-//   • All synchronization uses SemaphoreSlim (managed, no sem_open) and
-//     async/await (state-machine continuations, not blocked OS threads).
-//   • Send path is fully async: UdpClient.SendAsync, never UdpClient.Send.
+// Fix: remove every source of thread-pool usage.
+//   • No Task.Run, no async/await, no coroutine that yields to a thread.
+//   • Socket is opened with Blocking = false (non-blocking POSIX sendto).
+//   • The queue is drained in Update() — always on the main thread.
+//   • For a 24-byte OSC packet on loopback or LAN, a non-blocking sendto()
+//     returns in < 1 µs; it never stalls a frame.
 
-using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -29,55 +29,41 @@ public class OscSender : MonoBehaviour
     public string targetIP   = "127.0.0.1";
     public int    targetPort = 9000;
 
-    private UdpClient               _udp;
-    private ConcurrentQueue<byte[]> _queue;
-    private SemaphoreSlim           _signal;   // managed — no sem_open
-    private CancellationTokenSource _cts;
-    private Task                    _sendLoop;
-    private bool                    _ready;
+    // Plain Queue — only ever touched on the main thread, no lock needed.
+    private readonly Queue<byte[]> _queue = new();
+    private Socket   _socket;
+    private EndPoint _remote;
+    private bool     _ready;
 
     // ── Public API ────────────────────────────────────────────────────────────
 
-    /// <summary>
-    /// Construct and connect the socket on the calling (main) thread, then
-    /// start the async send loop. Safe to call from Awake or Start.
-    /// </summary>
     public void Initialize()
     {
         if (_ready) return;
 
-        // Socket work done here, on the main thread, before any Task or
-        // ThreadPool code runs. This is the key visionOS guard.
-        _udp = new UdpClient(AddressFamily.InterNetwork);
-        _udp.Client.SendBufferSize    = 65536;
-        _udp.Client.SendTimeout       = 0;      // async path ignores this, but be explicit
-        _udp.Connect(targetIP, targetPort);
-
-        _queue  = new ConcurrentQueue<byte[]>();
-        _signal = new SemaphoreSlim(0);
-        _cts    = new CancellationTokenSource();
-
-        // Task.Run is fine here: the UdpClient object is fully initialized
-        // before the loop touches it, so the runtime never needs to call
-        // sem_open for lazy socket setup.
-        _sendLoop = Task.Run(() => SendLoopAsync(_cts.Token));
+        // Raw Socket instead of UdpClient — no managed wrapper, no lazy
+        // thread-pool initialization hidden inside.
+        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
+        {
+            Blocking = false   // sendto() returns immediately — never stalls
+        };
+        _remote = new IPEndPoint(IPAddress.Parse(targetIP), targetPort);
 
         _ready = true;
         Debug.Log($"[OscSender] ready → {targetIP}:{targetPort}");
     }
 
     /// <summary>
-    /// Enqueue an OSC message with a single float argument.
-    /// Thread-safe; returns immediately — never blocks.
+    /// Enqueue an OSC message with one float argument.
+    /// Call only from the main thread (matches all visionOS input callbacks).
     /// </summary>
     public void Send(string address, float value)
     {
         if (!_ready) { Debug.LogWarning("[OscSender] not initialized"); return; }
         _queue.Enqueue(BuildOscFloat(address, value));
-        _signal.Release();
     }
 
-    // Convenience wrappers used by PlayStopTimeline
+    // Convenience wrappers for PlayStopTimeline
     public void SendPlay() => Send("/frestas/play", 1f);
     public void SendStop() => Send("/frestas/stop", 0f);
 
@@ -85,15 +71,9 @@ public class OscSender : MonoBehaviour
     {
         if (!_ready) return;
         _ready = false;
-
-        // Cancel first so WaitAsync throws OperationCanceledException.
-        _cts.Cancel();
-        // Close socket — unblocks any in-flight SendAsync with a SocketException.
-        _udp.Close();
-        // Dispose signal — any remaining WaitAsync throws ObjectDisposedException.
-        _signal.Dispose();
-        _cts.Dispose();
-        // _sendLoop exits on its own; we don't await here (OnDestroy is sync).
+        _queue.Clear();
+        try { _socket?.Close(); } catch { /* ignore */ }
+        _socket = null;
     }
 
     // ── Unity lifecycle ───────────────────────────────────────────────────────
@@ -101,54 +81,59 @@ public class OscSender : MonoBehaviour
     void Awake()     => Initialize();
     void OnDestroy() => Dispose();
 
-    // ── Async send loop ───────────────────────────────────────────────────────
-
-    private async Task SendLoopAsync(CancellationToken ct)
+    // Drain the queue every frame — all on the main thread, zero thread-pool.
+    void Update()
     {
-        while (true)
+        while (_queue.Count > 0)
         {
-            // SemaphoreSlim.WaitAsync — managed wait, no POSIX named semaphore.
-            try   { await _signal.WaitAsync(ct); }
-            catch (OperationCanceledException) { break; }
-            catch (ObjectDisposedException)    { break; }
-
-            if (!_queue.TryDequeue(out byte[] packet)) continue;
-
+            byte[] pkt = _queue.Dequeue();
             try
             {
-                // SendAsync never blocks the calling thread.
-                await _udp.SendAsync(packet, packet.Length);
+                _socket.SendTo(pkt, SocketFlags.None, _remote);
             }
-            catch (ObjectDisposedException)    { break; }          // socket closed in Dispose
-            catch (SocketException se) when (!ct.IsCancellationRequested)
+            catch (SocketException se) when (se.SocketErrorCode == SocketError.WouldBlock)
             {
-                Debug.LogWarning($"[OscSender] socket error {se.SocketErrorCode}: {se.Message}");
+                // Kernel send buffer momentarily full (extremely rare for UDP).
+                // Re-enqueue at the head next frame rather than dropping.
+                // Since Queue has no AddFirst, we rebuild — acceptable because
+                // this path is never taken in normal operation.
+                RebuildWithHead(pkt);
+                break;
             }
-            catch (Exception e) when (!ct.IsCancellationRequested)
+            catch (Exception e)
             {
                 Debug.LogWarning($"[OscSender] send error: {e.Message}");
             }
-            catch { break; }
         }
+    }
+
+    // Re-insert a packet at the front of the queue (only on WouldBlock).
+    void RebuildWithHead(byte[] head)
+    {
+        var tmp = new Queue<byte[]>(_queue.Count + 1);
+        tmp.Enqueue(head);
+        while (_queue.Count > 0) tmp.Enqueue(_queue.Dequeue());
+        _queue.Clear();
+        foreach (var p in tmp) _queue.Enqueue(p);
     }
 
     // ── OSC encoding ──────────────────────────────────────────────────────────
 
-    // Packet layout: <address>\0[pad] <,f>\0[pad] <float32 big-endian>
+    // Layout: <address>\0[pad] <,f>\0[pad] <float32 big-endian>
     static byte[] BuildOscFloat(string address, float value)
     {
         byte[] addr = OscString(address);
         byte[] tags = OscString(",f");
         byte[] arg  = FloatToOscBytes(value);
 
-        byte[] pkt  = new byte[addr.Length + tags.Length + arg.Length];
+        byte[] pkt = new byte[addr.Length + tags.Length + arg.Length];
         Buffer.BlockCopy(addr, 0, pkt, 0,                         addr.Length);
         Buffer.BlockCopy(tags, 0, pkt, addr.Length,               tags.Length);
         Buffer.BlockCopy(arg,  0, pkt, addr.Length + tags.Length, arg.Length);
         return pkt;
     }
 
-    // OSC string: ASCII, null-terminated, zero-padded to next 4-byte boundary
+    // OSC string: ASCII, null-terminated, zero-padded to 4-byte boundary
     static byte[] OscString(string s)
     {
         byte[] raw = Encoding.ASCII.GetBytes(s + "\0");
@@ -157,7 +142,7 @@ public class OscSender : MonoBehaviour
         return raw;
     }
 
-    // OSC float32: big-endian IEEE 754 (always 4 bytes, already aligned)
+    // OSC float32: big-endian IEEE 754
     static byte[] FloatToOscBytes(float v)
     {
         byte[] b = BitConverter.GetBytes(v);
