@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "Input Action Asset",
+    "maps": [
+        {
+            "name": "Hands",
+            "id": "94b09d12-4b49-4231-9adc-0620d524dc91",
+            "actions": [
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "902edad3-5cf7-41b9-98e9-62cd1cc3674b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fe017216-10c5-4934-a308-57ee8a7998ec",
+                    "path": "*/{GripButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
