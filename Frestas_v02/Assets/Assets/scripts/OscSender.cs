@@ -1,23 +1,12 @@
-// OscSender.cs — visionOS / IL2CPP safe, zero thread-pool usage
-//
-// Why sem_open persists after the previous fix:
-//   Task.Run() schedules work on the .NET thread pool. The first time any
-//   thread-pool thread is created, Mono/CoreCLR initialises its internal
-//   worker semaphore via sem_open() — which visionOS blocks unconditionally.
-//   UdpClient.SendAsync() hits the same path: its I/O completions are posted
-//   back through the thread pool. Moving the UdpClient constructor to the
-//   main thread does not help because the sem_open call happens later, on
-//   the first Task.Run / first async completion.
-//
-// Fix: remove every source of thread-pool usage.
-//   • No Task.Run, no async/await, no coroutine that yields to a thread.
-//   • Socket is opened with Blocking = false (non-blocking POSIX sendto).
-//   • The queue is drained in Update() — always on the main thread.
-//   • For a 24-byte OSC packet on loopback or LAN, a non-blocking sendto()
-//     returns in < 1 µs; it never stalls a frame.
+// OscSender.cs
+// OSC send-only component for FRESTAS.
+// Encoding and UdpClient pattern ported directly from syncmuseosc (the working
+// reference in this project) — same no-arg UdpClient constructor, same
+// Send(packet, length, host, port) overload, same InsertString / PadSize logic.
+
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
@@ -26,44 +15,34 @@ using UnityEngine;
 public class OscSender : MonoBehaviour
 {
     [Header("OSC Target")]
-    public string targetIP   = "127.0.0.1";
+    public string targetIP   = "10.10.143.78";
     public int    targetPort = 9000;
 
-    // Plain Queue — only ever touched on the main thread, no lock needed.
-    private readonly Queue<byte[]> _queue = new();
-    private Socket   _socket;
-    private EndPoint _remote;
-    private bool     _ready;
+    private UdpClient        _sender;
+    private Queue<byte[]>    _queue = new Queue<byte[]>();
+    private bool             _ready;
 
     // ── Public API ────────────────────────────────────────────────────────────
 
     public void Initialize()
     {
         if (_ready) return;
-
-        // Raw Socket instead of UdpClient — no managed wrapper, no lazy
-        // thread-pool initialization hidden inside.
-        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
-        {
-            Blocking = false   // sendto() returns immediately — never stalls
-        };
-        _remote = new IPEndPoint(IPAddress.Parse(targetIP), targetPort);
-
-        _ready = true;
+        _sender = new UdpClient();          // same as syncmuseosc: no-arg, no Connect()
+        _ready  = true;
         Debug.Log($"[OscSender] ready → {targetIP}:{targetPort}");
     }
 
-    /// <summary>
-    /// Enqueue an OSC message with one float argument.
-    /// Call only from the main thread (matches all visionOS input callbacks).
-    /// </summary>
+    /// <summary>Enqueue an OSC float message. Call from the main thread.</summary>
     public void Send(string address, float value)
     {
         if (!_ready) { Debug.LogWarning("[OscSender] not initialized"); return; }
-        _queue.Enqueue(BuildOscFloat(address, value));
+        byte[] packet = new byte[1000];
+        int length = BuildFloatMessage(address, value, packet);
+        byte[] trimmed = new byte[length];
+        Array.Copy(packet, trimmed, length);
+        _queue.Enqueue(trimmed);
     }
 
-    // Convenience wrappers for PlayStopTimeline
     public void SendPlay() => Send("/frestas/play", 1f);
     public void SendStop() => Send("/frestas/stop", 0f);
 
@@ -72,8 +51,8 @@ public class OscSender : MonoBehaviour
         if (!_ready) return;
         _ready = false;
         _queue.Clear();
-        try { _socket?.Close(); } catch { /* ignore */ }
-        _socket = null;
+        _sender?.Close();
+        _sender = null;
     }
 
     // ── Unity lifecycle ───────────────────────────────────────────────────────
@@ -81,7 +60,6 @@ public class OscSender : MonoBehaviour
     void Awake()     => Initialize();
     void OnDestroy() => Dispose();
 
-    // Drain the queue every frame — all on the main thread, zero thread-pool.
     void Update()
     {
         while (_queue.Count > 0)
@@ -89,64 +67,63 @@ public class OscSender : MonoBehaviour
             byte[] pkt = _queue.Dequeue();
             try
             {
-                _socket.SendTo(pkt, SocketFlags.None, _remote);
-            }
-            catch (SocketException se) when (se.SocketErrorCode == SocketError.WouldBlock)
-            {
-                // Kernel send buffer momentarily full (extremely rare for UDP).
-                // Re-enqueue at the head next frame rather than dropping.
-                // Since Queue has no AddFirst, we rebuild — acceptable because
-                // this path is never taken in normal operation.
-                RebuildWithHead(pkt);
-                break;
+                // Exact same send call as syncmuseosc SendPacket()
+                _sender.Send(pkt, pkt.Length, targetIP, targetPort);
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"[OscSender] send error: {e.Message}");
+                Debug.LogWarning($"[OscSender] {e.Message}");
             }
         }
     }
 
-    // Re-insert a packet at the front of the queue (only on WouldBlock).
-    void RebuildWithHead(byte[] head)
+    // ── OSC encoding — ported from syncmuseosc ────────────────────────────────
+
+    // Builds a single-float OSC message into packet[], returns byte count.
+    static int BuildFloatMessage(string address, float value, byte[] packet)
     {
-        var tmp = new Queue<byte[]>(_queue.Count + 1);
-        tmp.Enqueue(head);
-        while (_queue.Count > 0) tmp.Enqueue(_queue.Dequeue());
-        _queue.Clear();
-        foreach (var p in tmp) _queue.Enqueue(p);
+        int index = InsertString(address, packet, 0, packet.Length);
+
+        // Reserve space for the type tag (",f") before writing the argument.
+        int tagIndex = index;
+        index += PadSize(2 + 1);   // "," + "f" + null terminator, padded to 4
+
+        // Float argument — big-endian (syncmuseosc writes little-endian via
+        // BinaryWriter then reverses bytes; we use the same result directly).
+        byte[] b = new byte[4];
+        using (var ms = new MemoryStream(b))
+        using (var bw = new BinaryWriter(ms))
+            bw.Write(value);                // BinaryWriter is little-endian
+        packet[index++] = b[3];            // MSB first → big-endian
+        packet[index++] = b[2];
+        packet[index++] = b[1];
+        packet[index++] = b[0];
+
+        // Write type tag into the reserved slot
+        InsertString(",f", packet, tagIndex, packet.Length);
+
+        return index;
     }
 
-    // ── OSC encoding ──────────────────────────────────────────────────────────
-
-    // Layout: <address>\0[pad] <,f>\0[pad] <float32 big-endian>
-    static byte[] BuildOscFloat(string address, float value)
+    // From syncmuseosc — writes a null-terminated, 4-byte-padded ASCII string.
+    static int InsertString(string s, byte[] packet, int start, int length)
     {
-        byte[] addr = OscString(address);
-        byte[] tags = OscString(",f");
-        byte[] arg  = FloatToOscBytes(value);
-
-        byte[] pkt = new byte[addr.Length + tags.Length + arg.Length];
-        Buffer.BlockCopy(addr, 0, pkt, 0,                         addr.Length);
-        Buffer.BlockCopy(tags, 0, pkt, addr.Length,               tags.Length);
-        Buffer.BlockCopy(arg,  0, pkt, addr.Length + tags.Length, arg.Length);
-        return pkt;
+        int index = start;
+        foreach (char c in s)
+        {
+            packet[index++] = (byte)c;
+            if (index == length) return index;
+        }
+        packet[index++] = 0;
+        int pad = (s.Length + 1) % 4;
+        if (pad != 0) { pad = 4 - pad; while (pad-- > 0) packet[index++] = 0; }
+        return index;
     }
 
-    // OSC string: ASCII, null-terminated, zero-padded to 4-byte boundary
-    static byte[] OscString(string s)
+    // From syncmuseosc — rounds up to the next 4-byte boundary.
+    static int PadSize(int rawSize)
     {
-        byte[] raw = Encoding.ASCII.GetBytes(s + "\0");
-        int    rem = raw.Length % 4;
-        if (rem != 0) Array.Resize(ref raw, raw.Length + (4 - rem));
-        return raw;
-    }
-
-    // OSC float32: big-endian IEEE 754
-    static byte[] FloatToOscBytes(float v)
-    {
-        byte[] b = BitConverter.GetBytes(v);
-        if (BitConverter.IsLittleEndian) Array.Reverse(b);
-        return b;
+        int pad = rawSize % 4;
+        return pad == 0 ? rawSize : rawSize + (4 - pad);
     }
 }
