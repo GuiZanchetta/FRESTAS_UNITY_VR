@@ -14,7 +14,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
@@ -29,8 +28,14 @@ public class OscSender : MonoBehaviour
     public string targetIP   = "10.10.143.78";
     public int    targetPort = 9000;
 
+<<<<<<< HEAD
     private readonly Queue<byte[]> _queue = new();
     private bool _ready;
+=======
+    private UdpClient        _sender;
+    private Queue<byte[]>    _queue = new Queue<byte[]>();
+    private bool             _ready;
+>>>>>>> parent of 49f0cef (Update OscSender.cs)
 
     // ── Platform layer ────────────────────────────────────────────────────────
 
@@ -137,7 +142,13 @@ public class OscSender : MonoBehaviour
     public void Initialize()
     {
         if (_ready) return;
+<<<<<<< HEAD
         PlatformInit();
+=======
+        _sender = new UdpClient();          // same as syncmuseosc: no-arg, no Connect()
+        _ready  = true;
+        Debug.Log($"[OscSender] ready → {targetIP}:{targetPort}");
+>>>>>>> parent of 49f0cef (Update OscSender.cs)
     }
 
     public void Send(string address, float value)
@@ -167,7 +178,22 @@ public class OscSender : MonoBehaviour
     void Update()
     {
         while (_queue.Count > 0)
+<<<<<<< HEAD
             PlatformSend(_queue.Dequeue());
+=======
+        {
+            byte[] pkt = _queue.Dequeue();
+            try
+            {
+                // Exact same send call as syncmuseosc SendPacket()
+                _sender.Send(pkt, pkt.Length, targetIP, targetPort);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[OscSender] {e.Message}");
+            }
+        }
+>>>>>>> parent of 49f0cef (Update OscSender.cs)
     }
 
     // ── OSC encoding (from syncmuseosc) ───────────────────────────────────────
