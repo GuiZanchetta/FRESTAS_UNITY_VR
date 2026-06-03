@@ -1,7 +1,7 @@
 # Claude
 .claude/settings.local.json
 
-*.fbx
+
 # Unity generated
 [Ll]ibrary/
 [Tt]emp/
