@@ -4,19 +4,22 @@ using UnityEngine.Playables;
 public class ButtonTimelineTouch : MonoBehaviour
 {
     public PlayableDirector director;
-    public PlayableAsset timeline;
+    public PlayableAsset    timeline;
 
     [Header("Finger Settings")]
     public Transform leftFingertip;
     public Transform rightFingertip;
-    public float triggerDistance = 0.02f; // 2 cm
+    public float triggerDistance = 0.02f;
 
     [Header("Button Visual")]
-    public float pressDepth = 0.01f; // 1 cm
-    public float cooldown = 0.5f;
+    public float pressDepth = 0.01f;
+    public float cooldown   = 0.5f;
+
+    [Header("OSC")]
+    public OscSender oscSender; // optional — assign in Inspector to notify Reaper
 
     private Vector3 startPos;
-    private bool pressed = false;
+    private bool    pressed = false;
 
     void Start()
     {
@@ -27,8 +30,7 @@ public class ButtonTimelineTouch : MonoBehaviour
     {
         if (pressed) return;
 
-        // Check distance to either hand
-        if ((leftFingertip != null && Vector3.Distance(leftFingertip.position, transform.position) < triggerDistance) ||
+        if ((leftFingertip  != null && Vector3.Distance(leftFingertip.position,  transform.position) < triggerDistance) ||
             (rightFingertip != null && Vector3.Distance(rightFingertip.position, transform.position) < triggerDistance))
         {
             PressButton();
@@ -38,11 +40,8 @@ public class ButtonTimelineTouch : MonoBehaviour
     void PressButton()
     {
         pressed = true;
-
-        // Move button visually
         transform.localPosition = startPos - new Vector3(0, pressDepth, 0);
 
-        // Play timeline
         if (director != null && timeline != null)
         {
             director.Stop();
@@ -51,7 +50,8 @@ public class ButtonTimelineTouch : MonoBehaviour
             director.Play();
         }
 
-        // Reset after cooldown
+        oscSender?.SendPlay();
+
         Invoke(nameof(ResetButton), cooldown);
     }
 
