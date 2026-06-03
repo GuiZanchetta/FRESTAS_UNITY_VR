@@ -44,20 +44,20 @@ public class PlayStopTimeline : MonoBehaviour
         pressed = true;
         transform.localPosition = startPos - new Vector3(0, pressDepth, 0);
 
-        if (director != null)
+        if (resetInsteadOfPlay)
         {
-            if (resetInsteadOfPlay)
+            if (director != null)
             {
                 director.Stop();
                 director.time = 0;
                 director.Evaluate();
-                oscSender?.SendStop();
             }
-            else
-            {
-                director.Play();
-                oscSender?.SendPlay();
-            }
+            oscSender?.SendStop();
+        }
+        else
+        {
+            director?.Play();
+            oscSender?.SendPlay();
         }
 
         Invoke(nameof(ResetButton), cooldown);
