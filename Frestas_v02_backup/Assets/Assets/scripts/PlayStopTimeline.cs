@@ -17,6 +17,10 @@ public class PlayStopTimeline : MonoBehaviour
     [Header("Behavior")]
     public bool resetInsteadOfPlay = false; // toggle per button
 
+    [Header("OSC")]
+    public string buttonId = "playstop";
+    public bool sendButtonPressedOsc = true;
+
     private Vector3 startPos;
     private bool pressed = false;
 
@@ -54,13 +58,18 @@ public class PlayStopTimeline : MonoBehaviour
                 director.Stop();
                 director.time = 0;
                 director.Evaluate();
+                OscSender.Instance?.Send("/timeline/stop", buttonId);
             }
             else
             {
                 // PLAY
                 director.Play();
+                OscSender.Instance?.Send("/timeline/play", buttonId);
             }
         }
+
+        if (sendButtonPressedOsc)
+            OscSender.Instance?.Send("/button/pressed", buttonId);
 
         Invoke(nameof(ResetButton), cooldown);
     }
