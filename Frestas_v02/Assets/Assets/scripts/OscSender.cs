@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
@@ -28,7 +29,6 @@ public class OscSender : MonoBehaviour
     public string targetIP   = "10.10.143.78";
     public int    targetPort = 9000;
 
-    private UdpClient        _sender;
     private Queue<byte[]>    _queue = new Queue<byte[]>();
     private bool             _ready;
 
@@ -137,9 +137,7 @@ public class OscSender : MonoBehaviour
     public void Initialize()
     {
         if (_ready) return;
-        _sender = new UdpClient();          // same as syncmuseosc: no-arg, no Connect()
-        _ready  = true;
-        Debug.Log($"[OscSender] ready → {targetIP}:{targetPort}");
+        PlatformInit();   // sets _ready on success; routes to BSD socket on visionOS, UdpClient in Editor
     }
 
     public void Send(string address, float value)
@@ -171,15 +169,7 @@ public class OscSender : MonoBehaviour
         while (_queue.Count > 0)
         {
             byte[] pkt = _queue.Dequeue();
-            try
-            {
-                // Exact same send call as syncmuseosc SendPacket()
-                _sender.Send(pkt, pkt.Length, targetIP, targetPort);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[OscSender] {e.Message}");
-            }
+            PlatformSend(pkt);   // BSD sendto() on visionOS, managed UdpClient in Editor
         }
     }
 
