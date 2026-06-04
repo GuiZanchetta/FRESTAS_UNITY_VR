@@ -6,11 +6,10 @@ Unity project for **FRESTAS**, a research initiative exploring telematic music p
 
 ## Overview
 
-FRESTAS investigates new forms of networked musical performance where performers and audiences occupy spatially distinct physical locations yet share a common virtual acoustic space. The system bridges live ambisonics capture, transmission, and reproduction inside a VR environment, enabling presence-driven listening experiences that would be impossible in a conventional concert hall.
 
 This Unity project handles:
 
-- Spatial audio rendering (B-format ambisonics decoding) on Apple Vision Pro
+- Spatial audio triggering using OSC
 - Scene and environment setup for the immersive listening context
 - Integration with the telematic audio pipeline (network audio receive/playback)
 - VR interaction and presence design for visionOS
@@ -30,8 +29,8 @@ This Unity project handles:
         |
 [Apple Vision Pro — this repo]
   Unity visionOS build
-  Ambisonics decode & binaural render
-  Spatial scene / visual context
+  
+  
 ```
 
 ---
@@ -43,8 +42,7 @@ This Unity project handles:
 | Unity | TBD |
 | Unity visionOS Build Support | TBD |
 | Apple Vision Pro SDK (PolySpatial) | TBD |
-| Ambisonics plugin | TBD |
-| macOS (for Xcode build) | TBD |
+| macOS (for Xcode build) |
 
 > Fill in specific versions once the Unity project is initialized.
 
@@ -90,7 +88,12 @@ FRESTAS is a research project exploring telematic performance and spatial audio.
 
 ## Contributors
 
-- Guilherme Zanchetta
+- Amber
+
+- Guilherme
+ 
+- Axel
+
 
 ---
 
