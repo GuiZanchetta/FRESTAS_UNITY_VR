@@ -107,6 +107,12 @@ public class NetworkHud : MonoBehaviour
 {
     [SerializeField] private string address = "127.0.0.1";
     [SerializeField] private ushort port = 7776;
+   
+     void SetTransport()
+{
+    var transport = (UnityTransport)NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+    transport.SetConnectionData(address, port);
+}
 
     void OnGUI()
     {
@@ -129,5 +135,211 @@ public class NetworkHud : MonoBehaviour
         var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetConnectionData(address, port);
         // Host will listen on 7776; client will connect to address:7776
+    }
+}
+
+
+
+----
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+using UnityEngine.InputSystem.UI;
+#endif
+
+/// <summary>
+/// Minimal world-space connection UI for Netcode for GameObjects,
+/// compatible with visionOS (PolySpatial). OnGUI does not render on
+/// Vision Pro, so this builds a world-space Canvas with Host/Client
+/// buttons and a status label at runtime.
+/// Attach to any GameObject in the scene (e.g. the NetworkManager).
+/// </summary>
+public class VisionNetworkUI : MonoBehaviour
+{
+    [Header("Connection")]
+    [Tooltip("127.0.0.1 for editor tests; your Mac's LAN IP for the Vision Pro build")]
+    [SerializeField] private string address = "127.0.0.1";
+    [SerializeField] private ushort port = 7776;
+
+    [Header("Fully immersive (VR/Metal) mode")]
+    [Tooltip("On the Vision Pro build, start as client automatically — no UI input needed")]
+    [SerializeField] private bool autoStartClientOnDevice = true;
+    [SerializeField] private float autoStartDelay = 2f;
+
+    [Header("UI Placement (meters, relative to world origin)")]
+    [SerializeField] private Vector3 panelPosition = new Vector3(0f, 1.4f, 1.2f);
+
+    private Text statusText;
+    private GameObject hostButton;
+    private GameObject clientButton;
+
+    void Start()
+    {
+        BuildUI();
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+
+#if UNITY_VISIONOS && !UNITY_EDITOR
+        if (autoStartClientOnDevice)
+            StartCoroutine(AutoStartClient());
+#endif
+    }
+
+    private IEnumerator AutoStartClient()
+    {
+        statusText.text = $"Auto-connecting to {address}:{port} in {autoStartDelay:0}s";
+        yield return new WaitForSeconds(autoStartDelay);
+        if (!NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
+            StartClient();
+    }
+
+    void OnDestroy()
+    {
+        if (NetworkManager.Singleton == null) return;
+        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+    }
+
+    // ---------------- Network ----------------
+
+    private void StartHost()
+    {
+        SetTransport();
+        NetworkManager.Singleton.StartHost();
+        statusText.text = $"Hosting on port {port}";
+        ToggleButtons(false);
+    }
+
+    private void StartClient()
+    {
+        SetTransport();
+        NetworkManager.Singleton.StartClient();
+        statusText.text = $"Connecting to {address}:{port} ...";
+        ToggleButtons(false);
+    }
+
+    private void SetTransport()
+    {
+        var transport = (UnityTransport)NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+        transport.SetConnectionData(address, port);
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        statusText.text = NetworkManager.Singleton.IsHost
+            ? $"Host | clients: {NetworkManager.Singleton.ConnectedClientsList.Count}"
+            : $"Connected (id {NetworkManager.Singleton.LocalClientId})";
+    }
+
+    private void OnClientDisconnected(ulong clientId)
+    {
+        if (!NetworkManager.Singleton.IsConnectedClient && !NetworkManager.Singleton.IsHost)
+        {
+            statusText.text = "Disconnected";
+            ToggleButtons(true);
+        }
+    }
+
+    private void ToggleButtons(bool visible)
+    {
+        hostButton.SetActive(visible);
+        clientButton.SetActive(visible);
+    }
+
+    // ---------------- UI construction ----------------
+
+    private void BuildUI()
+    {
+        var canvasGO = new GameObject("NetCanvas",
+            typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+        var canvas = canvasGO.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.WorldSpace;
+
+        var rt = (RectTransform)canvas.transform;
+        rt.sizeDelta = new Vector2(600, 420);
+        canvasGO.transform.position = panelPosition;
+        canvasGO.transform.localScale = Vector3.one * 0.001f; // 600 px -> 0.6 m wide
+
+        CreatePanel(canvas.transform);
+
+        statusText = CreateText(canvas.transform, "Disconnected", 40,
+            new Vector2(0, 140), new Vector2(560, 80));
+
+        hostButton = CreateButton(canvas.transform, $"Host  :{port}",
+            new Vector2(0, 20), StartHost);
+
+        clientButton = CreateButton(canvas.transform, "Connect as Client",
+            new Vector2(0, -120), StartClient);
+
+        EnsureEventSystem();
+    }
+
+    private void CreatePanel(Transform parent)
+    {
+        var go = new GameObject("Panel", typeof(Image));
+        go.transform.SetParent(parent, false);
+        var rt = (RectTransform)go.transform;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+        go.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.6f);
+    }
+
+    private GameObject CreateButton(Transform parent, string label, Vector2 pos,
+        UnityEngine.Events.UnityAction onClick)
+    {
+        var go = new GameObject(label, typeof(Image), typeof(Button));
+        go.transform.SetParent(parent, false);
+        var rt = (RectTransform)go.transform;
+        rt.sizeDelta = new Vector2(420, 110);
+        rt.anchoredPosition = pos;
+        go.GetComponent<Image>().color = new Color(0.15f, 0.45f, 0.9f, 0.95f);
+        go.GetComponent<Button>().onClick.AddListener(onClick);
+        CreateText(go.transform, label, 40, Vector2.zero, new Vector2(420, 110));
+        return go;
+    }
+
+    private Text CreateText(Transform parent, string content, int size,
+        Vector2 pos, Vector2 sizeDelta)
+    {
+        var go = new GameObject("Text", typeof(Text));
+        go.transform.SetParent(parent, false);
+        var rt = (RectTransform)go.transform;
+        rt.sizeDelta = sizeDelta;
+        rt.anchoredPosition = pos;
+        var t = go.GetComponent<Text>();
+        t.text = content;
+        t.font = GetFont();
+        t.fontSize = size;
+        t.alignment = TextAnchor.MiddleCenter;
+        t.color = Color.white;
+        return t;
+    }
+
+    private static Font GetFont()
+    {
+        Font f = null;
+        try { f = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); } catch { }
+        if (f == null)
+        {
+            try { f = Resources.GetBuiltinResource<Font>("Arial.ttf"); } catch { }
+        }
+        return f;
+    }
+
+    private void EnsureEventSystem()
+    {
+        if (FindObjectOfType<EventSystem>() != null) return;
+        var es = new GameObject("EventSystem", typeof(EventSystem));
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        es.AddComponent<InputSystemUIInputModule>();
+#else
+        es.AddComponent<StandaloneInputModule>();
+#endif
     }
 }
