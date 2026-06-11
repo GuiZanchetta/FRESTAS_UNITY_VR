@@ -90,10 +90,44 @@ FRESTAS is a research project exploring telematic performance and spatial audio.
 
 ## Contributors
 
-- Guilherme Zanchetta
+
 
 ---
 
 ## License
 
 TBD
+
+
+using UnityEngine;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
+
+public class NetworkHud : MonoBehaviour
+{
+    [SerializeField] private string address = "127.0.0.1";
+    [SerializeField] private ushort port = 7776;
+
+    void OnGUI()
+    {
+        if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsServer) return;
+
+        if (GUILayout.Button("Host"))
+        {
+            SetTransport();
+            NetworkManager.Singleton.StartHost();
+        }
+        if (GUILayout.Button("Client"))
+        {
+            SetTransport();
+            NetworkManager.Singleton.StartClient();
+        }
+    }
+
+    void SetTransport()
+    {
+        var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.SetConnectionData(address, port);
+        // Host will listen on 7776; client will connect to address:7776
+    }
+}
