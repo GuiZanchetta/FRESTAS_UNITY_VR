@@ -1,0 +1,53 @@
+using System.Collections;
+using Unity.Netcode;
+using UnityEngine;
+
+public class XRNetworkAvatar : NetworkBehaviour
+{
+    [Header("Avatar Proxies")]
+    [SerializeField] private Transform headProxy;
+    [SerializeField] private Transform leftHandProxy;
+    [SerializeField] private Transform rightHandProxy;
+
+    private Transform headSource;
+    private Transform leftWristSource;
+    private Transform rightWristSource;
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) { enabled = false; return; }
+        StartCoroutine(FindSourcesWhenReady());
+    }
+
+    private IEnumerator FindSourcesWhenReady()
+    {
+        var origin = FindObjectOfType<Unity.XR.CoreUtils.XROrigin>();
+        var cameraOffset = origin.CameraFloorOffsetObject.transform;
+
+        while (headSource == null || leftWristSource == null || rightWristSource == null)
+        {
+            headSource       = cameraOffset.Find("Main Camera");
+            leftWristSource  = cameraOffset.Find("Left Hand Tracking/L_Wrist");
+            rightWristSource = cameraOffset.Find("Right Hand Tracking/R_Wrist");
+            yield return null;
+        }
+
+        var headMesh = headProxy.GetComponentInChildren<MeshRenderer>();
+        if (headMesh != null) headMesh.enabled = false;
+    }
+
+    void Update()
+    {
+        if (headSource == null || leftWristSource == null || rightWristSource == null) 
+            return;
+
+        headProxy.SetPositionAndRotation(
+            headSource.position, headSource.rotation);
+
+        leftHandProxy.SetPositionAndRotation(
+            leftWristSource.position, leftWristSource.rotation);
+
+        rightHandProxy.SetPositionAndRotation(
+            rightWristSource.position, rightWristSource.rotation);
+    }
+}
